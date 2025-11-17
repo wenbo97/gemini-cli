@@ -112,6 +112,12 @@ class GeminiAgent {
         name: 'Vertex AI',
         description: null,
       },
+      {
+        id: AuthType.USE_OPENAI,
+        name: 'Use OpenAI API key',
+        description:
+          'Requires setting the `OPENAI_API_KEY` environment variable',
+      },
     ];
 
     return {

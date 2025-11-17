@@ -183,6 +183,13 @@ describe('AuthDialog', () => {
     expect(items[initialIndex].value).toBe(AuthType.USE_GEMINI);
   });
 
+  it('selects initial auth type from OPENAI_API_KEY env var', () => {
+    process.env['OPENAI_API_KEY'] = 'test-key';
+    renderWithProviders(<AuthDialog {...props} />);
+    const { items, initialIndex } = mockedRadioButtonSelect.mock.calls[0][0];
+    expect(items[initialIndex].value).toBe(AuthType.USE_OPENAI);
+  });
+
   it('defaults to Login with Google', () => {
     renderWithProviders(<AuthDialog {...props} />);
     const { items, initialIndex } = mockedRadioButtonSelect.mock.calls[0][0];
