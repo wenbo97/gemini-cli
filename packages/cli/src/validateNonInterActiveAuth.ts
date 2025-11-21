@@ -10,6 +10,7 @@ import { USER_SETTINGS_PATH } from './config/settings.js';
 import { validateAuthMethod } from './config/auth.js';
 import { type LoadedSettings } from './config/settings.js';
 import { handleError } from './utils/errors.js';
+import { runExitCleanup } from './utils/cleanup.js';
 
 function getAuthTypeFromEnv(): AuthType | undefined {
   if (process.env['GOOGLE_GENAI_USE_GCA'] === 'true') {
@@ -72,6 +73,7 @@ export async function validateNonInteractiveAuth(
       );
     } else {
       debugLogger.error(error instanceof Error ? error.message : String(error));
+      await runExitCleanup();
       process.exit(1);
     }
   }

@@ -312,7 +312,7 @@ describe('ClearcutLogger', () => {
 
     it('logs all user settings', () => {
       const { logger } = setup({
-        config: { useSmartEdit: true, useModelRouter: true },
+        config: { useSmartEdit: true },
       });
 
       vi.stubEnv('TERM_PROGRAM', 'vscode');
@@ -417,6 +417,31 @@ describe('ClearcutLogger', () => {
         });
       },
     );
+  });
+
+  describe('GH_WORKFLOW_NAME metadata', () => {
+    it('includes workflow name when GH_WORKFLOW_NAME is set', () => {
+      const { logger } = setup({});
+      vi.stubEnv('GH_WORKFLOW_NAME', 'test-workflow');
+
+      const event = logger?.createLogEvent(EventNames.API_ERROR, []);
+      expect(event?.event_metadata[0]).toContainEqual({
+        gemini_cli_key: EventMetadataKey.GEMINI_CLI_GH_WORKFLOW_NAME,
+        value: 'test-workflow',
+      });
+    });
+
+    it('does not include workflow name when GH_WORKFLOW_NAME is not set', () => {
+      const { logger } = setup({});
+      vi.stubEnv('GH_WORKFLOW_NAME', undefined);
+
+      const event = logger?.createLogEvent(EventNames.API_ERROR, []);
+      const hasWorkflowName = event?.event_metadata[0].some(
+        (item) =>
+          item.gemini_cli_key === EventMetadataKey.GEMINI_CLI_GH_WORKFLOW_NAME,
+      );
+      expect(hasWorkflowName).toBe(false);
+    });
   });
 
   describe('logChatCompressionEvent', () => {
