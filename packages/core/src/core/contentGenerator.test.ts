@@ -160,6 +160,7 @@ describe('createContentGenerator', () => {
 
     await createContentGenerator(
       {
+        model: 'gemini-2.0-flash',
         authType: AuthType.LOGIN_WITH_GOOGLE,
       },
       mockConfig,
@@ -195,6 +196,7 @@ describe('createContentGenerator', () => {
 
     await createContentGenerator(
       {
+        model: 'gemini-2.0-flash',
         apiKey: 'test-api-key',
         authType: AuthType.USE_GEMINI,
       },
@@ -236,6 +238,7 @@ describe('createContentGenerator', () => {
 
     await createContentGenerator(
       {
+        model: 'gemini-2.0-flash',
         apiKey: 'test-api-key',
         authType: AuthType.USE_GEMINI,
       },
@@ -267,6 +270,7 @@ describe('createContentGenerator', () => {
 
     await createContentGenerator(
       {
+        model: 'gemini-2.0-flash',
         apiKey: 'test-api-key',
         authType: AuthType.USE_GEMINI,
       },
