@@ -1,0 +1,10 @@
+description = "List supported .NET versions for NuGet packages in a directory"
+prompt = """
+I need you to list the supported .NET versions for the NuGet packages located in the directory `{{args}}`.
+
+Please perform the following steps:
+1.  List all subdirectories within `{{args}}`. Each subdirectory represents a NuGet package.
+2.  For each package directory, look for a folder named `lib`.
+3.  If the `lib` folder exists, list the names of the subdirectories inside it. These names correspond to the supported .NET versions.
+4.  Report the results in a clear json list format, showing the package name and its supported versions. and save to a file.
+"""
