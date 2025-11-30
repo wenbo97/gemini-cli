@@ -1,0 +1,34 @@
+# .gemini/commands/dotnet-upgrade-plan.toml
+
+# Command to be executed when the user runs the Gemini CLI command
+command = "dotnet-upgrade"
+
+
+description = "Support a C# project (.csproj) to build both net472 and net8.0 with changes and known-issues solutions query from the existed MCP query-known-issues-and-solutions tool"
+
+# Define the steps that will be executed as part of the command
+steps = """
+1. Update .csproj for multi-targeting.
+2. Update project references to support both frameworks.
+3. Validate the project with a build.
+4. Fix known issues with the existed mcp tool 'query-known-issues-and-solutions'  .
+"""
+
+prompt = """
+You are tasked with upgrading a C# project to support both net472 and net8.0 frameworks.
+
+Steps to follow:
+1. Update .csproj file to support multi-targeting for net472 and net8.0.
+2. Update any references that need to be adjusted for the two target frameworks.
+3. Run the build process to validate changes.
+4. Use the MCP tool 'query-known-issues-and-solutions' to check for any known issues related to the upgrade process.
+
+Input:
+- .csproj file: Specify the path to the project file.
+- Target frameworks: Specify the target frameworks (net472, net8.0).
+- Known Issues Query: Optionally provide a topic to query known issues related to the upgrade.
+
+Example: "C:/path/to/Project.csproj"
+"""
+
+

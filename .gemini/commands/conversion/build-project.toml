@@ -1,0 +1,13 @@
+description = "Execute the build process for the specified C# project."
+
+prompt = """
+# Command Definition
+run_shell_command(command="cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd {{projectFolder}} && C:/src/ControlPlane/build/path1st/build.cmd"",directory="{{projectFolder}}")
+
+#Description
+* Use the following command format to execute the build and DO NOT redirect session output.
+* When user uses this command, always perform the build directly **NOW**.
+
+# Addition
+* {{projectFolder}} MUST be replaced with the root directory of the target C# project from {{args}}.
+"""
