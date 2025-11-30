@@ -1,13 +1,25 @@
 {
   "context": {
     "fileName": [
-      "docs/upgrade-multi-target/outline/upgrade-multi-target-outline.md",
-      "docs/upgrade-multi-target/outline/task-variables-definition-outline.md",
-      "docs/upgrade-multi-target/outline/code-level-known-issues-solutions-outline.md",
-      "docs/upgrade-multi-target/outline/git-branch-creation-for-netcore-migration-outline.md",
-      "docs/upgrade-multi-target/outline/logging-outline.md",
-      "docs/upgrade-multi-target/issue-and-solution/code-issue-and-solution.md",
-      "docs/upgrade-multi-target/issue-and-solution/project-issue-and-solution.md"
+      "packages/rag-server/rules/before-build-guidance/always-logging-task-execution.md",
+      "packages/rag-server/rules/before-build-guidance/git-branch-creation-for-netcore-migration.md",
+      "packages/rag-server/rules/before-build-guidance/support-multiple-target-in-csproj.md",
+      "packages/rag-server/rules/before-build-guidance/system-variables-definition.md",
+      "packages/rag-server/rules/before-build-guidance/task-variables-definition-outline.md",
+      "packages/rag-server/rules/before-build-guidance/upgrade-multi-target-outline.md",
+      "packages/rag-server/rules/before-build-guidance/conditional-project-reference.md",
+      "packages/rag-server/rules/before-build-guidance/internals-visible-to-alignment.md",
+      "packages/rag-server/rules/code-level/caller-stub-remoting-fallback.md",
+      "packages/rag-server/rules/code-level/general-notes-code-fixes.md",
+      "packages/rag-server/rules/code-level/legacy-remoting-api.md",
+      "packages/rag-server/rules/code-level/strict-remoting-type-reliable-remoting-proxy.md",
+      "packages/rag-server/rules/project-level/cs0122-internal-access.md",
+      "packages/rag-server/rules/project-level/cs0246-missing-type-after-conditional-projectreference.md",
+      "packages/rag-server/rules/project-level/import-split.md",
+      "packages/rag-server/rules/project-level/net8-wrapper-inventory.md",
+      "packages/rag-server/rules/project-level/nu1701-warning.md",
+      "packages/rag-server/rules/project-level/project-conversion-outline.md",
+      "packages/rag-server/rules/project-level/reference-condition.md"
     ],
     "fileFiltering": {
       "respectGitIgnore": false
@@ -36,5 +48,15 @@
     "useAlternateBuffer ": true,
     "incrementalRendering": true
   },
-  "general.disableAutoUpdate": true
+  "general.disableAutoUpdate": true,
+  "mcpServers": {
+    "nodeServer": {
+      "trust": true,
+      "command": "node",
+      "args": [
+        "C:/src/myGemini-cli/gemini-cli/packages/rag-server/dist/src/index.js",
+        "--verbose"
+      ]
+    }
+  }
 }
