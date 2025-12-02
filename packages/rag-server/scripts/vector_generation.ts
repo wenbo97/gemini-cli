@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 import { AzureKeyCredential } from "@azure/core-auth";
 import ModelClient, { isUnexpected, type GetEmbeddings200Response, type GetEmbeddingsDefaultResponse } from "@azure-rest/ai-inference";
 import * as fs from 'fs';
-const vectorDBPath = "C:/src/myGemini-cli/gemini-cli/packages/rag-server/vectordb";
+const vectorDBPath = "C:/src/gemini-cli/packages/rag-server/vectordb";
 
 export interface DocumentChunk {
   id: string;
@@ -15,6 +15,7 @@ export interface DocumentChunk {
   vector: number[];
   source: string;
   createdAt: string;
+  score: number,
   [key: string]: unknown;
 }
 
@@ -113,7 +114,7 @@ export async function structDocGeneration(): Promise<DocumentChunk[]> {
   }
   `;
 
-  const mdFileRoot = "C:/src/myGemini-cli/gemini-cli/packages/rag-server/rules";
+  const mdFileRoot = "C:/src/gemini-cli/packages/rag-server/rules";
   try {
     // Read the files in the specified directory
 
@@ -166,6 +167,7 @@ export async function structDocGeneration(): Promise<DocumentChunk[]> {
           text: fileContent,
           vector,
           source: filePath,
+          score: -1,
           createdAt: new Date().toISOString(),
         };
 

@@ -3,7 +3,7 @@
 ### Title: Example Template for New Rules
 
 ### Summary
-Template for defining new rules with a consistent structure for use in Gemini CLI’s rule-based guidance system.
+Template for defining new rules with a consistent structure for use in Gemini CLIÃ¢â‚¬â„¢s rule-based guidance system.
 
 ---
 
@@ -18,12 +18,12 @@ Use this template as a starting point when adding new rules. It matches the stru
 ---
 
 ### Solution
-#### Step 1 — Fill out core sections
+#### Step 1 Ã¢â‚¬â€ Fill out core sections
 - Provide a clear title and short summary.
 - Describe the problem and solution in detail.
 - Define precise trigger conditions.
 
-#### Step 2 — Add code or XML examples when useful
+#### Step 2 Ã¢â‚¬â€ Add code or XML examples when useful
 - Include code snippets that illustrate the transformation or configuration.
 
 ---

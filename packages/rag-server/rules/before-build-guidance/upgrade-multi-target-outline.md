@@ -1,61 +1,92 @@
-## [Id:7]
+## [Id:6]
 ## [Rule:UpgradeMultiTargetOutline]
 ### Title: DotNet Upgrade Multi Target Outline
 
 ### Summary
 High-level workflow for converting a C# project to multi-target `net472` and `net8.0`, including project file updates, reference handling, and validation builds.
 
----
-
 ### Description
 This rule outlines the main tasks required to convert an existing C# project so that it builds for both `net472` and `net8.0`:
-
-- Modify the `.csproj` to support multiple TargetFrameworks.
-- Handle conditional references and imports.
-- Apply `InternalsVisibleTo` alignment when introducing wrapper projects.
-- Run quick and full builds to validate the multi-target configuration.
+- Modify the `.csproj` to support multiple TargetFrameworks
+- Handle conditional references and imports
+- Apply `InternalsVisibleTo` alignment when introducing wrapper projects
+- Run quick and full builds to validate the multi-target configuration
 
 The rule also emphasizes that existing tags or sections in the project file (such as `<Compile>`, `<ProjectReference>`, `<ItemGroup>`) must not be deleted or modified unless the change is covered by a specific known-issue rule.
 
----
+### Metadata
+- Category: `before-build-guidance`
+- Severity: `high`
+- Applicable Frameworks: `net472`, `net8.0`
+- Project Types: `all`
 
 ### Trigger Conditions
-1. A C# project needs to be converted to support both `net472` and `net8.0`.
+1. A C# project needs to be converted to support both `net472` and `net8.0`
+2. Project currently targets single framework
+3. Multi-targeting strategy has been approved
 
----
+### Solutions
 
-### Solution
-#### Step 1 — Pre-build setup
+#### Step 1: Pre-build setup
 1. Update `<TargetFramework>` to `<TargetFrameworks>`:
-   - Replace `<TargetFramework>net472</TargetFramework>` with `<TargetFrameworks>net472;net8.0</TargetFrameworks>`.
-2. Check existing `<ProjectReference>` items and ensure they are conditional on `$(TargetFramework)` where necessary (for example, legacy vs. wrapper projects).
+   - Replace `<TargetFramework>net472</TargetFramework>` with `<TargetFrameworks>net472;net8.0</TargetFrameworks>`
+2. Check existing `<ProjectReference>` items and ensure they are conditional on `$(TargetFramework)` where necessary (for example, legacy vs. wrapper projects)
 
-#### Step 2 — Apply `InternalsVisibleTo` alignment
-- When adding a new wrapper project for `net8.0`, ensure that any referenced projects expose the necessary internals to the caller (see `[Rule:InternalsVisibleToAlignment]`).
+#### Step 2: Apply `InternalsVisibleTo` alignment
+- When adding a new wrapper project for `net8.0`, ensure that any referenced projects expose the necessary internals to the caller (see `[Rule:InternalsVisibleToAlignment]`)
 
-#### Step 3 — Build and validate
-1. Run `quick-build-project` for each project to recover necessary assemblies.
-2. Run `build-project` after pre-build fixes to validate the full multi-target build.
-3. If build errors occur, consult the code-level and project-level issue-and-solution documents.
+#### Step 3: Build and validate
+1. Run `quick-build-project` for each project to recover necessary assemblies
+2. Run `build-project` after pre-build fixes to validate the full multi-target build
+3. If build errors occur, consult the code-level and project-level issue-and-solution documents
 
-#### Step 4 — Final verification and summary
-- Confirm that both `net472` and `net8.0` builds succeed.
-- Summarize the key changes and decisions applied during conversion.
+#### Step 4: Final verification and summary
+- Confirm that both `net472` and `net8.0` builds succeed
+- Summarize the key changes and decisions applied during conversion
 
----
+### Variables
+- `[PROJECT_PATH]`: Path to the .csproj file being converted
+- `[ORIGINAL_FRAMEWORK]`: Original single target framework (typically net472)
+- `[TARGET_FRAMEWORKS]`: New multi-target frameworks (net472;net8.0)
+
+### Real Examples
+```xml
+<!-- Example 1: Simple conversion -->
+<!-- Before -->
+<PropertyGroup>
+  <TargetFramework>net472</TargetFramework>
+</PropertyGroup>
+
+<!-- After -->
+<PropertyGroup>
+  <TargetFrameworks>net472;net8.0</TargetFrameworks>
+</PropertyGroup>
+
+<!-- Example 2: With conditional references -->
+<ItemGroup>
+  <ProjectReference Include="..\Legacy\Legacy.csproj" Condition="'$(TargetFramework)' == 'net472'" />
+  <ProjectReference Include="..\Legacy.Net8\Legacy.Net8.csproj" Condition="'$(TargetFramework)' == 'net8.0'" />
+</ItemGroup>
+```
+
+### Validation
+- Verify both framework builds complete successfully
+- Check no existing project file elements were inadvertently deleted
+- Ensure all conditional references resolve correctly
+- Confirm InternalsVisibleTo alignments are in place
 
 ### Logging
-* Log each project where multi-target conversion is initiated.
-* Log TargetFramework changes, conditional ProjectReference updates, and build outcomes.
+* Log each project where multi-target conversion is initiated
+* Log TargetFramework changes, conditional ProjectReference updates, and build outcomes
+* Log any errors encountered and their resolutions
+* Log final build success status for each framework
 
 ### Related Rules
 - [Rule:TargetFrameworksUpdate]
 - [Rule:ConditionalProjectReference]
 - [Rule:InternalsVisibleToAlignment]
+- [Rule:SystemVariablesDefinition]
+- [Rule:CS0246MissingType]
 
-#### Metadata
-- Category: `before-build-guidance`
-
-- Severity: `high`
-
-- Owner: <v-wangjunf>
+### Owner
+<v-wangjunf>
