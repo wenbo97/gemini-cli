@@ -332,6 +332,7 @@ export interface ConfigParameters {
         [K in HookEventName]?: HookDefinition[];
       } & { disabled?: string[] });
   previewFeatures?: boolean;
+  enableAgents?: boolean;
   enableModelAvailabilityService?: boolean;
   experimentalJitContext?: boolean;
 }
@@ -455,6 +456,7 @@ export class Config {
   private previewModelFallbackMode = false;
   private previewModelBypassMode = false;
   private readonly enableModelAvailabilityService: boolean;
+  private readonly enableAgents: boolean;
 
   private readonly experimentalJitContext: boolean;
   private contextManager?: ContextManager;
@@ -518,6 +520,7 @@ export class Config {
     this.model = params.model;
     this.enableModelAvailabilityService =
       params.enableModelAvailabilityService ?? false;
+    this.enableAgents = params.enableAgents ?? false;
     this.experimentalJitContext = params.experimentalJitContext ?? false;
     this.modelAvailabilityService = new ModelAvailabilityService();
     this.previewFeatures = params.previewFeatures ?? undefined;
@@ -1233,6 +1236,10 @@ export class Config {
 
   isModelAvailabilityServiceEnabled(): boolean {
     return this.enableModelAvailabilityService;
+  }
+
+  isAgentsEnabled(): boolean {
+    return this.enableAgents;
   }
 
   getNoBrowser(): boolean {
