@@ -16,25 +16,25 @@
       "C:/src/ControlPlane",
       "C:/.tools/CxCache"
     ],
-    "loadFromIncludeDirectories": false
-  },
-  "security": {
-    "auth": {
-      "selectedType": "github-copilot"
-    }
-  },
-  "ide": {
-    "enable": true,
-    "hasSeenNudge": true
-  },
-  "github-copilot": {
-    "model": "gpt-5.1"
-  },
-  "ui": {
-    "showModelInfoInChat": true,
-    "showCitations": true,
-    "useAlternateBuffer ": true,
-    "incrementalRendering": true
-  },
-  "general.disableAutoUpdate": true
+    "loadFromIncludeDirectories": false,
+    "security": {
+      "auth": {
+        "selectedType": "github-copilot"
+      }
+    },
+    "ide": {
+      "enable": true,
+      "hasSeenNudge": true
+    },
+    "github-copilot": {
+      "model": "gpt-5.1"
+    },
+    "ui": {
+      "showModelInfoInChat": true,
+      "showCitations": true,
+      "useAlternateBuffer ": true,
+      "incrementalRendering": true
+    },
+    "general.disableAutoUpdate": true
+  }
 }

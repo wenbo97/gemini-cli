@@ -134,6 +134,9 @@ export function AuthDialog({
         return;
       }
       if (authType) {
+        const isInitialAuthSelection =
+          !settings.merged.security?.auth?.selectedType;
+
         await clearCachedCredentialFile();
 
         settings.setValue(scope, 'security.auth.selectedType', authType);
@@ -148,10 +151,16 @@ export function AuthDialog({
           }, 100);
           return;
         }
-      }
-      if (authType === AuthType.USE_GEMINI) {
-        setAuthState(AuthState.AwaitingApiKeyInput);
-        return;
+
+        if (authType === AuthType.USE_GEMINI) {
+          if (isInitialAuthSelection && process.env['GEMINI_API_KEY']) {
+            setAuthState(AuthState.Unauthenticated);
+            return;
+          } else {
+            setAuthState(AuthState.AwaitingApiKeyInput);
+            return;
+          }
+        }
       }
       setAuthState(AuthState.Unauthenticated);
     },
@@ -163,6 +172,7 @@ export function AuthDialog({
     if (error) {
       onAuthError(error);
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       onSelect(authMethod, SettingScope.User);
     }
   };
@@ -182,6 +192,7 @@ export function AuthDialog({
           );
           return;
         }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         onSelect(undefined, SettingScope.User);
       }
     },
