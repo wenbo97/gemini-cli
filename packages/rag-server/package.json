@@ -8,7 +8,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc -b",
     "start": "node dist/src/index.js",
-    "build-index": "ts-node-dev scripts/build-index.ts"
+    "build-index": "ts-node-dev scripts/build-index.ts",
+    "gen:vector": "tsx scripts/vector_generation.ts",
   },
   "keywords": [],
   "author": "",
@@ -16,12 +17,21 @@
   "type": "module",
   "devDependencies": {
     "@types/express": "^5.0.5",
-    "@types/node": "^24.10.1"
+    "@types/node": "^24.10.1",
+    "@types/winston": "^2.4.4",
+    "winston": "^3.18.3"
   },
   "dependencies": {
+    "@azure-rest/ai-inference": "latest",
+    "@azure/core-auth": "latest",
+    "@azure/core-sse": "latest",
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "dotenv-flow": "^4.1.0",
     "express": "^4.21.2",
     "openai": "^5.23.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vectordb": "^0.21.2",
+    "zod": "^3.25.76"
   }
 }
