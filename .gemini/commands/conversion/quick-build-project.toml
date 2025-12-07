@@ -1,0 +1,24 @@
+description = "Execute the quick build process for the specified C# project."
+
+prompt = """
+Use the following command format to execute the quick build:
+
+```cmd
+cmd /k "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd {{projectFolder}} && C:/.tools/QuickBuild/quickbuild.cmd -notest"
+```
+
+Where:
+* {{projectFolder}} MUST be replaced with the root directory of the target C# project.
+* If the input is not a directory path, derive the folder path from it (e.g., from a .csproj file, take its parent directory).
+* DO NOT use output redirection operators (such as >, >>, 2>&1). The output must appear in the console directly.
+* Keep the entire command inside one double-quoted string.
+* myenv.cmd MUST be executed first to initialize the build environment.
+
+Additional requirements:
+1. Validate the final command path format (use forward slashes only).
+2. Ensure the `cd` path exists, otherwise return an error message instead of running the command.
+3. Never add additional flags, arguments, or assumptions beyond what is defined above.
+4. If paths contain spaces, automatically wrap the path with double quotes.
+
+Your goal is to construct **and execute** the final command exactly as required.
+"""

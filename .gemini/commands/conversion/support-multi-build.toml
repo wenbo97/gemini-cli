@@ -1,0 +1,50 @@
+description = "Support a C# project (.csproj) to build both net472 and net8.0 with changes."
+
+# Mandatory Decision Logging
+prompt = """
+You are upgrading a C# project to support both net472 and net8.0 based on guidance from all outline files.
+
+# Before our task, we should following the guidance from:
+`task-variables-definition-outline.md`
+`git-branch-creation-for-netcore-migration-outline.md`
+
+# Task Scope
+
+**Your job is to:**
+1. **Check `project-issue-and-solution.md`** to evaluate if referenced libraries require different implementations and FriendAssemblies.cs alignment.
+   - **Decision**: Apply [Rule:InternalsVisibleToAlignment] for the referenced project(s) if the rule is present in `project-issue-and-solution.md`.
+   - Ensure the `FriendAssemblies.cs` file in the referenced project is updated only **if explicitly required by project-issue-and-solution.md**.
+   - **Do not modify or delete any other section** of the `.csproj` file unless it is directly required.
+
+2. **Modify `.csproj` file** for the main project:
+   - Convert `<TargetFramework>` to `<TargetFrameworks>` to support `net472` and `net8.0` **only if instructed by the rules in `project-issue-and-solution.md`**.
+   - **Do not modify any other tags, such as `<Compile>`, `<ItemGroup>`, etc., unless explicitly required**.
+   - **Decision**: Apply changes based on rules from `project-issue-and-solution.md`, no more, no less.
+
+3. **Preserve All Existing Tags**:
+   - **Only wrap or add conditional project references** as needed is metioned in a rule - [Rule:ConditionalProjectReference] in `project-issue-and-solution.md`.
+
+4. **Apply Safe Pre-Build Fixes**:
+   - Apply the fixes from `project-issue-and-solution.md` for multi-targeting support **only** if those rules are applicable.
+   - **Do not alter unrelated parts of the `.csproj` file**.
+
+5. **Build the Project**:
+   - Run `build-project {{args}}` to validate the multi-targeting build.
+   - **Decision**: Run `build-project` to verify that changes were applied correctly and that no unnecessary modifications were made.
+
+6. **Verify and Handle Build Errors**:
+   - If build errors occur, analyze them using `code-issue-and-solution.md`.
+   - **Decision**: If errors are related to missing types (e.g., CS0246), check the referenced projects and apply fixes from `code-issue-and-solution.md` based on the exact error.
+   - **Do not modify or delete other sections** unless explicitly required.
+
+7. **Final Verification**:
+   - Ensure that both `net472` and `net8.0` builds succeed.
+   - Provide a summary of changes and verify no further issues remain.
+   - **Decision**: Conversion complete with multi-targeting support for net472 and net8.0.
+
+### Example Decision Logs:
+echo "Decision: Applied InternalsVisibleTo alignment for referenced project."
+echo "Decision: Updated TargetFramework for multi-targeting support."
+echo "Decision: Run quick-build-project to recover necessary assemblies."
+echo "Decision: Run build-project to verify this fix."
+"""

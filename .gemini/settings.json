@@ -1,18 +1,54 @@
 {
-  "openai": {
-    "apiKey": "sk-dummy-key-for-local-proxy",
-    "baseUrl": "http://localhost:4141/v1",
-    "model": "gemini-2.5-pro"
-  },
-  "github-copilot": {
-    "model": "gemini-2.5-pro"
-  },
-  "security": {
-    "auth": {
-      "selectedType": "github-copilot"
+  "experimental": {
+    "codebaseInvestigatorSettings": {
+      "enabled": false
     }
   },
-  "general":{
-    "disableAutoUpdate": true
+  "context": {
+    "fileName": [
+      "docs/upgrade-multi-target/outline/always-logging-task-execution.md",
+      "docs/upgrade-multi-target/outline/upgrade-multi-target-outline.md",
+      "docs/upgrade-multi-target/outline/system-variables-definition.md",
+      "docs/upgrade-multi-target/outline/outline.md",
+      "docs/upgrade-multi-target/outline/git-branch-creation-for-netcore-migration.md",
+      "docs/upgrade-multi-target/outline/general-notes-code-fixes.md"
+    ],
+    "fileFiltering": {
+      "respectGitIgnore": false
+    },
+    "includeDirectories": [
+      "C:/src/ControlPlane",
+      "C:/.tools/CxCache"
+    ],
+    "loadFromIncludeDirectories": false,
+    "security": {
+      "auth": {
+        "selectedType": "github-copilot"
+      }
+    },
+    "ide": {
+      "enable": true,
+      "hasSeenNudge": true
+    },
+    "github-copilot": {
+      "model": "gpt-5.1"
+    },
+    "ui": {
+      "showModelInfoInChat": true,
+      "showCitations": true,
+      "useAlternateBuffer ": true,
+      "incrementalRendering": true
+    },
+    "general.disableAutoUpdate": true
+  },
+  "mcpServers": {
+    "nodeServer": {
+      "trust": true,
+      "command": "node",
+      "args": [
+        "packages/rag-server/dist/src/index.js",
+        "--verbose"
+      ]
+    }
   }
 }
