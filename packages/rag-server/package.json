@@ -9,7 +9,7 @@
     "build": "tsc -b",
     "start": "node dist/src/index.js",
     "build-index": "ts-node-dev scripts/build-index.ts",
-    "gen:vector": "tsx scripts/vector_generation.ts",
+    "gen:vector": "tsx scripts/vector_generation.ts"
   },
   "keywords": [],
   "author": "",
