@@ -37,70 +37,73 @@ async function checkForUpdates(
   log: (message: string) => void,
   isManagedExtensionSurface: boolean,
 ) {
-  try {
-    const currentVersion = context.extension.packageJSON.version;
 
-    // Fetch extension details from the VSCode Marketplace.
-    const response = await fetch(
-      'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json;api-version=7.1-preview.1',
-        },
-        body: JSON.stringify({
-          filters: [
-            {
-              criteria: [
-                {
-                  filterType: 7, // Corresponds to ExtensionName
-                  value: CLI_IDE_COMPANION_IDENTIFIER,
-                },
-              ],
-            },
-          ],
-          // See: https://learn.microsoft.com/en-us/azure/devops/extend/gallery/apis/hyper-linking?view=azure-devops
-          // 946 = IncludeVersions | IncludeFiles | IncludeCategoryAndTags |
-          //       IncludeShortDescription | IncludePublisher | IncludeStatistics
-          flags: 946,
-        }),
-      },
-    );
+  log("Update has disabled in code.");
+  return;
+  // try {
+  //   const currentVersion = context.extension.packageJSON.version;
 
-    if (!response.ok) {
-      log(
-        `Failed to fetch latest version info from marketplace: ${response.statusText}`,
-      );
-      return;
-    }
+  //   // Fetch extension details from the VSCode Marketplace.
+  //   const response = await fetch(
+  //     'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery',
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Accept: 'application/json;api-version=7.1-preview.1',
+  //       },
+  //       body: JSON.stringify({
+  //         filters: [
+  //           {
+  //             criteria: [
+  //               {
+  //                 filterType: 7, // Corresponds to ExtensionName
+  //                 value: CLI_IDE_COMPANION_IDENTIFIER,
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //         // See: https://learn.microsoft.com/en-us/azure/devops/extend/gallery/apis/hyper-linking?view=azure-devops
+  //         // 946 = IncludeVersions | IncludeFiles | IncludeCategoryAndTags |
+  //         //       IncludeShortDescription | IncludePublisher | IncludeStatistics
+  //         flags: 946,
+  //       }),
+  //     },
+  //   );
 
-    const data = await response.json();
-    const extension = data?.results?.[0]?.extensions?.[0];
-    // The versions are sorted by date, so the first one is the latest.
-    const latestVersion = extension?.versions?.[0]?.version;
+  //   if (!response.ok) {
+  //     log(
+  //       `Failed to fetch latest version info from marketplace: ${response.statusText}`,
+  //     );
+  //     return;
+  //   }
 
-    if (
-      !isManagedExtensionSurface &&
-      latestVersion &&
-      semver.gt(latestVersion, currentVersion)
-    ) {
-      const selection = await vscode.window.showInformationMessage(
-        `A new version (${latestVersion}) of the Gemini CLI Companion extension is available.`,
-        'Update to latest version',
-      );
-      if (selection === 'Update to latest version') {
-        // The install command will update the extension if a newer version is found.
-        await vscode.commands.executeCommand(
-          'workbench.extensions.installExtension',
-          CLI_IDE_COMPANION_IDENTIFIER,
-        );
-      }
-    }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    log(`Error checking for extension updates: ${message}`);
-  }
+  //   const data = await response.json();
+  //   const extension = data?.results?.[0]?.extensions?.[0];
+  //   // The versions are sorted by date, so the first one is the latest.
+  //   const latestVersion = extension?.versions?.[0]?.version;
+
+  //   if (
+  //     !isManagedExtensionSurface &&
+  //     latestVersion &&
+  //     semver.gt(latestVersion, currentVersion)
+  //   ) {
+  //     const selection = await vscode.window.showInformationMessage(
+  //       `A new version (${latestVersion}) of the Gemini CLI Companion extension is available.`,
+  //       'Update to latest version',
+  //     );
+  //     if (selection === 'Update to latest version') {
+  //       // The install command will update the extension if a newer version is found.
+  //       await vscode.commands.executeCommand(
+  //         'workbench.extensions.installExtension',
+  //         CLI_IDE_COMPANION_IDENTIFIER,
+  //       );
+  //     }
+  //   }
+  // } catch (error) {
+  //   const message = error instanceof Error ? error.message : String(error);
+  //   log(`Error checking for extension updates: ${message}`);
+  // }
 }
 
 export async function activate(context: vscode.ExtensionContext) {

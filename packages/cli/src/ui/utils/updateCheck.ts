@@ -10,6 +10,7 @@ import { getPackageJson, debugLogger } from '@google/gemini-cli-core';
 import type { LoadedSettings } from '../../config/settings.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { log } from 'node:console';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +51,8 @@ function getBestAvailableUpdate(
 export async function checkForUpdates(
   settings: LoadedSettings,
 ): Promise<UpdateObject | null> {
+
+  log("Nightly update has disabled.");
   try {
     if (settings.merged.general?.disableUpdateNag) {
       return null;

@@ -91,7 +91,7 @@ export class ExtensionManager extends ExtensionLoader {
     this.extensionEnablementManager = new ExtensionEnablementManager(
       options.enabledExtensionOverrides,
     );
-    this.settings = options.settings;
+    this.settings  = options.settings;
     this.telemetryConfig = new Config({
       telemetry: options.settings.telemetry,
       interactive: false,
@@ -100,6 +100,7 @@ export class ExtensionManager extends ExtensionLoader {
       cwd: options.workspaceDir,
       model: '',
       debugMode: false,
+      githubCopilot: this.settings["github-copilot"] ?? {}
     });
     this.requestConsent = options.requestConsent;
     this.requestSetting = options.requestSetting ?? undefined;

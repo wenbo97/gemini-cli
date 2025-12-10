@@ -1,5 +1,5 @@
 {
-  "name": "@google/gemini-cli",
+  "name": "gemini",
   "version": "0.21.0-nightly.20251204.3da4fd5f7",
   "engines": {
     "node": ">=20.0.0"
@@ -8,6 +8,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "bin": {
+    "gemini": "./bundle/gemini.js"
+  },
   "private": "true",
   "repository": {
     "type": "git",
@@ -67,9 +70,6 @@
     "cliui": {
       "wrap-ansi": "7.0.0"
     }
-  },
-  "bin": {
-    "gemini": "bundle/gemini.js"
   },
   "files": [
     "bundle/",

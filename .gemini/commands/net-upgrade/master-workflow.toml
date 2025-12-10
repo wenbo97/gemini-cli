@@ -1,0 +1,11 @@
+description = "Migrate a chsarp project to both support legacy NetFramework and .NET 8."
+
+prompt = """
+#  Instruction
+- You must strictly execute the logic defined in the context file **outline.md**.
+
+# Phase 1: Infrastructure & Configuration
+- [ ] **Task 01**: Configure Multi-Targeting at {{ProjectPath}}
+    - **Action**: Strictly follow steps in `@steps/ChangeToMultiTarget.md`.
+    - **Note**: Apply changes specifically to the target project identified above.
+"""
