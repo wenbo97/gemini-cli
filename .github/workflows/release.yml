@@ -20,15 +20,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --ignore-scripts
 
       # Only keep this step if your project needs a build command (e.g., TypeScript)
       # If not, remove these two lines.
-      - name: Build project
-        run: npm run build
+      - name: Bundle project
+        run: npm run bundle
 
       - name: Pack extension
-        run: npm pack
+        run: npm pack --ignore-scripts
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
