@@ -1,44 +1,62 @@
 # System Variables Definition for Build Commands
 
 # Summary
-Define and consistently use the `build-project` and `quick-build-project` command templates and the locations of key upgrade metadata files.
+
+Define and consistently use the `build-project` and `quick-build-project`
+command templates and the locations of key upgrade metadata files.
 
 # Description
-Upgrade automation relies on standardized command templates and metadata file locations. This rule defines how to construct `build-project` and `quick-build-project` commands and where to find the project-level and code-level issue-and-solution documents.
+
+Upgrade automation relies on standardized command templates and metadata file
+locations. This rule defines how to construct `build-project` and
+`quick-build-project` commands and where to find the project-level and
+code-level issue-and-solution documents.
 
 # Metadata
+
 - Category: `system-level`
 
 # Variables
-- `[PROJECT_FOLDER]`: Root directory is `C:/src/ControlPlane`
+
+- `[ROOT_DIR]`: Root directory is `C:/src/ControlPlane` if you cannot find it,
+  confirm with user.
 
 # Trigger Conditions
+
 1. Any automation needs to run a quick build or full build for a given project
 
 # Solutions
 
 ## Derive folder from .csproj path
+
 - Input: `C:/src/MyProject/MyProject.csproj`
 - Derived PROJECT_FOLDER: `C:/src/MyProject`
 
 ## Step 1: Define `build-project` command
-Use the following template, replacing `[PROJECT_FOLDER]` with the root directory of the target C# project:
+
+Use the following template, replacing `[PROJECT_FOLDER]` with the root directory
+of the target C# project:
 
 ```cmd
-run_shell_command(cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd [PROJECT_FOLDER] && C:/src/ControlPlane/tools/path1st/build.cmd")
+run_shell_command(cmd /c "[ROOT_DIR]/tools/path1st/myenv.cmd && cd [PROJECT_FOLDER] && [ROOT_DIR]/tools/path1st/build.cmd")
 ```
 
 ## Step 2: Define `quick-build-project` command
-Use the following template, again replacing `[PROJECT_FOLDER]` with the root directory of the target C# project:
+
+Use the following template, again replacing `[PROJECT_FOLDER]` with the root
+directory of the target C# project:
 
 ```cmd
-run_shell_command(cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd [PROJECT_FOLDER] && C:/.tools/QuickBuild/quickbuild.cmd -notest")
+run_shell_command(cmd /c "[ROOT_DIR]/tools/path1st/myenv.cmd && cd [PROJECT_FOLDER] && C:/.tools/QuickBuild/quickbuild.cmd -notest")
 ```
 
 ## Step 3: Respect input path semantics
-- If the input is not a directory path, derive `[PROJECT_FOLDER]` from it (for example, use the parent directory of a `.csproj` file)
+
+- If the input is not a directory path, derive `[PROJECT_FOLDER]` from it (for
+  example, use the parent directory of a `.csproj` file)
 - Always keep the entire shell command inside one double-quoted string (`"..."`)
-- **DO NOT** use output redirection operators such as `>`, `>>`, or `2>&1`; output must appear directly in the console
+- **DO NOT** use output redirection operators such as `>`, `>>`, or `2>&1`;
+  output must appear directly in the console
 
 <!-- #### Step 4: Document key documentation locations
 - Project-level issues and solutions: `packages/rag-server/rules/project-level/*.md`
@@ -46,11 +64,15 @@ run_shell_command(cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd [PRO
 - Before-build guidance: `packages/rag-server/rules/before-build-guidance/*.md` -->
 
 ## Operation Definition
+
 **Build project definition**
+
 ```cmd
 run_shell_command(cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd C:/src/MyProject && C:/src/ControlPlane/tools/path1st/myenv.cmd")
 ```
+
 **Quick Build project definition**
+
 ```cmd
 run_shell_command(cmd /c "C:/src/ControlPlane/tools/path1st/myenv.cmd && cd C:/src/MyProject && C:/.tools/QuickBuild/quickbuild.cmd -notest")
 ```
