@@ -1,6 +1,6 @@
 {
   "name": "@net-upgrade/gemini-cli",
-  "version": "0.21.0-nightly.20251209.ec9a8c7a7",
+  "version": "0.0.3",
   "engines": {
     "node": ">=20.0.0"
   },
