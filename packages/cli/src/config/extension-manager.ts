@@ -91,7 +91,7 @@ export class ExtensionManager extends ExtensionLoader {
     this.extensionEnablementManager = new ExtensionEnablementManager(
       options.enabledExtensionOverrides,
     );
-    this.settings  = options.settings;
+    this.settings = options.settings;
     this.telemetryConfig = new Config({
       telemetry: options.settings.telemetry,
       interactive: false,
@@ -100,7 +100,7 @@ export class ExtensionManager extends ExtensionLoader {
       cwd: options.workspaceDir,
       model: '',
       debugMode: false,
-      githubCopilot: this.settings["github-copilot"] ?? {}
+      githubCopilot: this.settings['github-copilot'] ?? {},
     });
     this.requestConsent = options.requestConsent;
     this.requestSetting = options.requestSetting ?? undefined;
@@ -515,10 +515,13 @@ export class ExtensionManager extends ExtensionLoader {
         )
         .filter((contextFilePath) => fs.existsSync(contextFilePath));
 
-      const hooks = await this.loadExtensionHooks(effectiveExtensionPath, {
-        extensionPath: effectiveExtensionPath,
-        workspacePath: this.workspaceDir,
-      });
+      let hooks: { [K in HookEventName]?: HookDefinition[] } | undefined;
+      if (this.settings.tools?.enableHooks) {
+        hooks = await this.loadExtensionHooks(effectiveExtensionPath, {
+          extensionPath: effectiveExtensionPath,
+          workspacePath: this.workspaceDir,
+        });
+      }
 
       const extension = {
         name: config.name,
