@@ -14,7 +14,10 @@ import type {
 } from '@google/genai';
 import { GoogleGenAI } from '@google/genai';
 import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
-import { DEFAULT_GEMINI_MODEL } from '../config/models.js';
+import {
+  DEFAULT_GEMINI_MODEL,
+  DEFAULT_GEMINI_MODEL_AUTO,
+} from '../config/models.js';
 import type { Config } from '../config/config.js';
 import { loadApiKey } from './apiKeyCredentialStorage.js';
 
@@ -103,9 +106,21 @@ export async function createContentGeneratorConfig(
   // Determine the effective model based on auth type first
   let effectiveModel: string;
   if (authType === AuthType.GITHUB_COPILOT) {
-    effectiveModel = githubCopilotSettings?.model || 'gpt-4o'; // GitHub Copilot default model
+    const configuredModel = config.getModel();
+    if (configuredModel && configuredModel !== DEFAULT_GEMINI_MODEL_AUTO) {
+      effectiveModel = configuredModel;
+    } else {
+      effectiveModel =
+        githubCopilotSettings?.model || DEFAULT_GEMINI_MODEL_AUTO;
+    }
   } else if (authType === AuthType.USE_OPENAI) {
-    effectiveModel = openaiSettings?.model || openaiModel || 'gpt-3.5-turbo';
+    const configuredModel = config.getModel();
+    if (configuredModel && configuredModel !== DEFAULT_GEMINI_MODEL_AUTO) {
+      effectiveModel = configuredModel;
+    } else {
+      effectiveModel =
+        openaiSettings?.model || openaiModel || DEFAULT_GEMINI_MODEL_AUTO;
+    }
   } else {
     effectiveModel = config.getModel() || DEFAULT_GEMINI_MODEL;
   }
