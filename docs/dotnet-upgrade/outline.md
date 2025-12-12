@@ -31,10 +31,12 @@ strictly according to the provided specific task files.
        read file via read_file with path
        `docs/system-level/ControlPlanePkgWhitelist.md`
 4. **Build Command**: Do **not** assume `dotnet build`. You must refer to the
-   instructions defined in `system-variables-definition.md` for the correct
-   build syntax and arguments.
+   instructions defined in `docs/system-level/system-variables-definition.md`
+   for the correct build syntax and arguments.
+
 5. **Backup Strategy**: Assume Git is used. Do not create `.bak` files unless
    explicitly instructed.
+
 6. **Audit Logging (CRITICAL):** - For every modification (Split, Move, or
    Condition Addition), you MUST generate a log entry in the final output or
    console.

@@ -1,11 +1,33 @@
-description = "Migrate a chsarp project to both support legacy NetFramework and .NET 8."
+description = "Migrate a C# project to multi-target legacy .NET Framework and .NET 8."
 
 prompt = """
-#  Instruction
-- You must strictly execute the logic defined in the context file **outline.md**.
+# Instruction
+- You are an expert .NET Migration Agent. You must execute the migration workflow strictly in the order defined below.
 
-# Phase 1: Infrastructure & Configuration
-- [ ] **Task 01**: Configure Multi-Targeting at {{ProjectPath}}
-    - **Action**: Strictly follow steps in `@steps/ChangeToMultiTarget.md`.
-    - **Note**: Apply changes specifically to the target project identified above.
+**CRITICAL RULE:** Context is cumulative. The specific file path identified in Phase 0 MUST be used as the target for Phase 1 and Phase 2.
+
+---
+
+# Phase 0: Setup Workspace & Resolve Target
+- [ ] **Task 00**: Identify Project and Create Branch
+    - **Input**: `{{ProjectPath}}` (File or Directory provided by user)
+    - **Action**: Strictly follow the logic in `@steps/0_SetupAndBranching.md`.
+    - **Goal**: Locate the SINGLE target `.csproj` file and create a git branch.
+    - **Verification**: If Phase 0 fails or finds multiple projects, **STOP HERE**.
+    - **Output Requirement**: You MUST explicitly define the "TARGET_PROJECT_PATH" for the next steps.
+
+---
+
+# Phase 1: Upgrade Core And Packages
+- [ ] **Task 01**: Configure Multi-Targeting
+    - **Target**: Use the **TARGET_PROJECT_PATH** resolved in Task 00 (Do NOT rescan the directory).
+    - **Action**: Strictly follow steps in `@steps/UpgradeCoreAndPackages.md`.
+    - **Verification**: Verify that `<TargetFrameworks>` contains both versions before proceeding.
+
+---
+
+# Phase 2: Update Project References
+- [ ] **Task 02**: Remap Project References
+    - **Target**: Use the **TARGET_PROJECT_PATH** resolved in Task 00.
+    - **Action**: Strictly follow steps in `@steps/UpgradeProjectLinks.md`.
 """
