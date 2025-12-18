@@ -3,6 +3,10 @@ name: Build and Upload Asset
 on:
   release:
     types: [created]
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
