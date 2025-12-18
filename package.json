@@ -11,6 +11,19 @@
   "bin": {
     "gemini": "./bundle/gemini.js"
   },
+  "pkg": {
+    "scripts": "bundle/gemini.js",
+    "assets": [
+      ".gemini/**/*",
+      "docs/dotnet-upgrade/**/*"
+    ],
+    "targets": [
+      "node18-win-x64",
+      "node18-linux-x64",
+      "node18-macos-x64"
+    ],
+    "outputPath": "dist"
+  },
   "private": "true",
   "repository": {
     "type": "git",
