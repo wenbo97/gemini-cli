@@ -23,13 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      - name: Install pkg
-        run: npm install -g pkg
-
       - name: Bundle project
         run: npm run bundle
 
-      - name: Pack extension
+      - name: Pack .tgz package
         run: npm pack --ignore-scripts
 
       - name: Bundle .gemini + dotnet-upgrade docs
@@ -40,15 +37,8 @@ jobs:
           cd dist
           zip -r gemini-docs-package.zip docs
 
-      - name: Build cross-platform CLI binaries
-        run: |
-          mkdir -p dist
-          pkg . --targets node18-win-x64 --output dist/net-upgrade-gemini-win.exe
-          pkg . --targets node18-linux-x64 --output dist/net-upgrade-gemini-linux
-          pkg . --targets node18-macos-x64 --output dist/net-upgrade-gemini-macos
-
-      - name: List dist contents (debug)
-        run: ls -lh dist
+      - name: List built assets (debug)
+        run: ls -lh . dist
 
       - name: Upload Release .tgz
         uses: softprops/action-gh-release@v2
@@ -63,16 +53,3 @@ jobs:
           files: dist/gemini-docs-package.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload CLI binaries (all platforms)
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/net-upgrade-gemini-win.exe
-            dist/net-upgrade-gemini-linux
-            dist/net-upgrade-gemini-macos
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Verify Snapshot
-        run: strings dist/net-upgrade-gemini-win.exe | grep gemini.js
