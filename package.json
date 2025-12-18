@@ -9,11 +9,14 @@
     "packages/*"
   ],
   "bin": {
-    "gemini": "./bundle/gemini.js"
+    "gemini": "./bin/cli.cjs"
   },
   "pkg": {
-    "scripts": "bundle/gemini.js",
+    "scripts": [
+      "bin/cli.cjs"
+    ],
     "assets": [
+      "bundle/**/*",
       ".gemini/**/*",
       "docs/dotnet-upgrade/**/*"
     ],

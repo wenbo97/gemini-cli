@@ -34,11 +34,11 @@ jobs:
 
       - name: Bundle .gemini + dotnet-upgrade docs
         run: |
-          mkdir -p dist/package-content
-          cp -r docs/dotnet-upgrade dist/package-content/
-          cp -r .gemini dist/package-content/
+          mkdir -p dist/docs
+          cp -r docs/dotnet-upgrade dist/docs/
+          cp -r .gemini dist/docs/
           cd dist
-          zip -r gemini-docs-package.zip package-content
+          zip -r gemini-docs-package.zip docs
 
       - name: Build cross-platform CLI binaries
         run: |
@@ -73,3 +73,6 @@ jobs:
             dist/net-upgrade-gemini-macos
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Verify Snapshot
+        run: strings dist/net-upgrade-gemini-win.exe | grep gemini.js
