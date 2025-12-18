@@ -50,19 +50,15 @@ validating the workspace and target project.
 - **Base Branch Name:**
   `users/<UserEmailPrefix>/net_core_migration_<SanitizedAssemblyName>`
 - **Workflow:**
-  1.  **Reset:** Determine the default branch (e.g., `master`, `main`, or other)
-      and switch to it:
-      - Execute:
-        `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
-        to find the default branch.
-      - Use the result to switch: `git switch <default-branch>`.
-  2.  **Find Unique Name (Auto-Increment):**
-      - Check if `<Base Branch Name>` exists.
-      - **If No:** Use `<Base Branch Name>`.
-      - **If Yes:** **Only** then append suffix `_1`, `_2`, etc., and check
-        again.
-      - **Loop:** Increment suffix (`_1`, `_2`...) until a non-existent branch
-        name is found.
-      - _Example:_ If `..._Provider` exists, try `..._Provider_1`.
-  3.  **Create & Switch:**
-      - Execute: `git switch -c <UniqueBranchName>`
+  1. **Determine Default Branch**
+     - Execute: `git remote show origin`
+     - Parse the line: `HEAD branch: <default-branch>`
+     - Extract `<default-branch>` value.
+       > platform-appropriate tooling (e.g. PowerShell, Bash, or agent logic).
+  2. **Switch to Default Branch**
+     - Execute: `git switch <default-branch>`
+  3. **Find Unique Name (Auto-Increment)**
+     - Check if `<Base Branch Name>` exists.
+     - If it exists, append `_1`, `_2`, … until a non-existent name is found.
+  4. **Create & Switch**
+     - Execute: `git switch -c <UniqueBranchName>`
