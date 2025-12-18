@@ -21,7 +21,11 @@
 4. Unzip `gemini-docs-package.zip`, then move the extracted `.gemini` folder to
    the parent directory.
 
-5. Place your `settings.json` and `.env` files inside the `.gemini` directory.
+5. Place your `settings.json` and `.env` files inside the `.gemini` directory
+   and set your _GITHUB_TOKEN_ in `.env` file
+   ```yaml
+   GITHUB_TOKEN=<your-github-pat-token>
+   ```
 
 - Directory: ![workspace](docs\assets\gemini-workspace.png)
   ![secret](docs\assets\gemini-secret-files.png)
