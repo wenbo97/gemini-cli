@@ -1,72 +1,68 @@
+# Objective
+
+Create and switch to a unique task branch from the default branch after
+validating the workspace and target project.
+
 # Work Plan: Environment Setup & Branching
-
-## Context
-
-You are a DevOps automation agent responsible for preparing the workspace before
-a .NET migration.
-
-## Global Constraints
-
-1.  **Safe Fail:** If any step fails (e.g., cannot find git user, multiple
-    csproj files found), **ABORT** and report the error.
-2.  **Local Ops Only:** Do NOT run `git pull` or push to remote. Operate
-    strictly on the local repository.
 
 ## Step-by-step Guide
 
-### 1. Resolve Target Project
+### 1. Ensure Clean Git Workspace (Auto-Stash)
 
-- **Input:** User provided path `{{ProjectPath}}`.
+- **Action:** Check current workspace status.
+- **Command:** `git status --porcelain`
 - **Logic:**
-  1.  **Check Path Type:**
-      - If input is a **File** (ends in `.csproj`): Select it.
-      - If input is a **Directory**: Scan for `*.csproj` files inside.
-  2.  **Ambiguity Check:**
-      - **0 matches:** ABORT. Report "No .csproj file found".
-      - **1 match:** Select this file as the **Target Project**.
-      - **>1 matches:** **ABORT IMMEDIATELY.**
-        - List all found `.csproj` files.
-        - Ask the user to re-run the command with the specific file path.
+  1.  If output is **empty** → Workspace is clean → Continue.
+  2.  If output is **non-empty** → Workspace has local changes:
+      - Execute:
+        ```cmd
+        git stash push -u -m "auto-stash: setup-and-branching before net_core_migration"
+        ```
+      - Record that a stash was created.
+- **Constraints:**
+  - Do NOT apply (`pop`) the stash in this task.
+  - Stash is preserved for potential manual or later automated recovery.
 
 ### 2. Extract Project Metadata
 
 - Read the **Target Project** file content.
-- **Extract `AssemblyName`:**
-  - Look for `<AssemblyName>...</AssemblyName>`.
-  - If not found, fall back to the filename (without extension).
-- **Sanitize Name:**
-  - Replace all dots `.` in the AssemblyName with underscores `_`.
-  - _Example:_ `My.Cool.App` -> `My_Cool_App`
+- **Extract `AssemblyName`:** Use `<AssemblyName>` tag or fallback to filename.
+- **Sanitize Name:** Replace `.` with `_`. (e.g., `My.App` -> `My_App`).
 
 ### 3. Determine Git User Identity
 
 - **Action:** Execute `git config user.email`
 - **Logic:**
-  - If result is empty -> default to `dev_user`.
-  - If result is an email (e.g., `v-wangjunf@microsoft.com`) -> Extract the part
-    **before** the `@` (e.g., `v-wangjunf`).
-- **Clean:** Remove any whitespace or special characters.
+  1.  **Capture:** Get the output string.
+  2.  **Parse:**
+      - If Empty/Null -> Set `UserEmailPrefix` to `dev_user`.
+      - If contains `@` -> Take substring **before** the first `@`.
+      - If no `@` -> Use full string.
+  3.  **Sanitize:**
+      - Convert to Lowercase.
+      - **Rule:** Replace `.` (dots) and special symbols with `_`, but
+        **preserve hyphens (`-`)**.
+      - _Example:_ `v-wangjunf@microsoft.com` -> `v-wangjunf` (Hyphen kept, dot
+        replaced).
 
 ### 4. Create and Switch Branch
 
-- **Target Branch Name:**
-  `users/<UserPrefix>/net_core_migration_<SanitizedAssemblyName>`
+- **Base Branch Name:**
+  `users/<UserEmailPrefix>/net_core_migration_<SanitizedAssemblyName>`
 - **Workflow:**
-  1.  **Reset to Base:** - Execute: `git switch master`
-      - _Constraint:_ Ensure we start from `master`. If `master` doesn't exist
-        (e.g., repo uses `main`), try `git switch main`.
-
-  2.  **Create/Switch:**
-      - **Attempt 1 (Create New):** - Execute:
-        `git switch -c <TargetBranchName>`
-        - _Meaning:_ Create (`-c`) and switch to the new branch based on the
-          current HEAD (master).
-      - **Attempt 2 (Fallback - Already Exists):**
-        - If Attempt 1 fails (because branch exists), Execute:
-          `git switch <TargetBranchName>`
-        - _Meaning:_ Simply switch to the existing migration branch.
-
-### 5. Final Output
-
-- **CRITICAL:** Output the exact absolute path of the **Target Project**.
-- Format: `Target Project Resolved: <AbsolutePath>`
+  1.  **Reset:** Determine the default branch (e.g., `master`, `main`, or other)
+      and switch to it:
+      - Execute:
+        `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
+        to find the default branch.
+      - Use the result to switch: `git switch <default-branch>`.
+  2.  **Find Unique Name (Auto-Increment):**
+      - Check if `<Base Branch Name>` exists.
+      - **If No:** Use `<Base Branch Name>`.
+      - **If Yes:** **Only** then append suffix `_1`, `_2`, etc., and check
+        again.
+      - **Loop:** Increment suffix (`_1`, `_2`...) until a non-existent branch
+        name is found.
+      - _Example:_ If `..._Provider` exists, try `..._Provider_1`.
+  3.  **Create & Switch:**
+      - Execute: `git switch -c <UniqueBranchName>`

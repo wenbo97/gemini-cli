@@ -1,42 +1,30 @@
-## [Id:2]
-## [Rule:ExampleTemplate]
-### Title: Example Template for New Rules
+# Work Plan: [Your Title]
 
-### Summary
-Template for defining new rules with a consistent structure for use in Gemini CLI’s rule-based guidance system.
+## Step-by-step Guide
 
----
+### 1. [Step Title]
 
-### Description
-Use this template as a starting point when adding new rules. It matches the structure used by other rules under `packages/rag-server/rules/**`.
+- Inputs:
+  - [Relevant mapping file / variable definition / discovered code locations]
+- Actions:
+  - [Concrete edits / transformations]
+- Output:
+  - [Expected artifacts, e.g., modified csproj, updated code]
+- Logging requirements:
+  - Record: [what was found, what was changed, why]
 
----
+### 2. [Step Title]
 
-### Trigger Conditions
-1. You need to add a new rule for Gemini CLI guidance.
+...
 
----
+### N. Ask user for manual action (Optional)
 
-### Solution
-#### Step 1 — Fill out core sections
-- Provide a clear title and short summary.
-- Describe the problem and solution in detail.
-- Define precise trigger conditions.
+If the remaining work is explicitly out of automation scope:
 
-#### Step 2 — Add code or XML examples when useful
-- Include code snippets that illustrate the transformation or configuration.
+- Provide exact manual instructions
+- Use the marker below to gate continuation:
 
----
+### N+1. Re-scan / verify post-action (Optional)
 
-### Logging
-* Log that a new rule was created using this template.
-
-### Related Rules
-- `before-build-guidance`
-
-#### Metadata
-- Category: `project-level` / `code-level` / `build`
-
-- Severity: `low`
-
-- Owner: <v-alias>
+- Re-run scans from match criteria
+- Confirm the project is now compliant

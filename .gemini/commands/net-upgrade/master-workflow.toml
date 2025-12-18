@@ -2,32 +2,60 @@ description = "Migrate a C# project to multi-target legacy .NET Framework and .N
 
 prompt = """
 # Instruction
-- You are an expert .NET Migration Agent. You must execute the migration workflow strictly in the order defined below.
+- You are an expert .NET Migration Agent.
+- You must execute the migration workflow strictly in the order defined below.
+- To confirm with current working dir, check in `@system-level/SystemVariablesDefinition.md`
+- Do not commit the modified changes after all tasks are done.
 
-**CRITICAL RULE:** Context is cumulative. The specific file path identified in Phase 0 MUST be used as the target for Phase 1 and Phase 2.
+# GLOBAL MODE: NO GUESSING (SOFT)
+**CRITICAL RULES (Highest Priority)**
+1. **SOP Supremacy**
+   - Follow `@steps/*.md` SOP exactly. If SOP conflicts with general best practices, SOP wins.
+   - If SOP is silent about a needed decision, STOP and ask.
+   - Call write_todos to list all phases and update todo list items' status for each phase.
+2. **No Confirmation Needed**
+   - When all required inputs are present and SOP is deterministic, proceed phase-by-phase without asking for confirmation.
 
----
+### EXCEPTION: Only when explicitly enabled by user
+- Improvisation is DISABLED by default.
+- Only enable improvisation if user provides an explicit override token:
+  - `@AllowImprovise@` or `ALLOW_IMPROVISATION=true`
+- When enabled, you must still log what you improvised and why.
+
+### OUTPUT DISCIPLINE
+- For each phase:
+  - State inputs you used (files/paths/snippets).
+  - Execute only the SOP-defined actions.
+  - If blocked, produce a concise Blocking Question and stop.
+
+- When execution is blocked for ANY reason, you MUST:
+  - Retry for three times.
+  - If still block after retrying for three times, STOP all execution immediately.
+  - Output ONLY the following structure:
+    **Required Output Format (Exact):**
+      BLOCKED: <concise description of what prevents execution>
+      NEEDED: <exact artifacts required to continue>
+        - file paths
+        - file contents or snippets
+        - command outputs
+        - explicit user decisions
+      WHY: <which SOP file + section requires this information>
 
 # Phase 0: Setup Workspace & Resolve Target
-- [ ] **Task 00**: Identify Project and Create Branch
-    - **Input**: `{{ProjectPath}}` (File or Directory provided by user)
-    - **Action**: Strictly follow the logic in `@steps/0_SetupAndBranching.md`.
-    - **Goal**: Locate the SINGLE target `.csproj` file and create a git branch.
-    - **Verification**: If Phase 0 fails or finds multiple projects, **STOP HERE**.
-    - **Output Requirement**: You MUST explicitly define the "TARGET_PROJECT_PATH" for the next steps.
+- Action: Strictly follow logic in `@steps/SetupAndBranching.md`.
 
----
+# Phase 1: Isolate AutoPublishDestination Element
+- Action: Strictly follow steps in `@steps/IsolateBuildItems.md`.
 
-# Phase 1: Upgrade Core And Packages
-- [ ] **Task 01**: Configure Multi-Targeting
-    - **Target**: Use the **TARGET_PROJECT_PATH** resolved in Task 00 (Do NOT rescan the directory).
-    - **Action**: Strictly follow steps in `@steps/UpgradeCoreAndPackages.md`.
-    - **Verification**: Verify that `<TargetFrameworks>` contains both versions before proceeding.
+# Phase 2: Update TargetFramework
+- Action: Strictly follow steps in `@steps/UpdateTargetFramework.md`.
 
----
+# Phase 3: Update Package References
+- Action: Strictly follow steps in `@steps/UpdatePackageReferences.md`.
 
-# Phase 2: Update Project References
-- [ ] **Task 02**: Remap Project References
-    - **Target**: Use the **TARGET_PROJECT_PATH** resolved in Task 00.
-    - **Action**: Strictly follow steps in `@steps/UpgradeProjectLinks.md`.
+# Phase 4: Update Project References
+- Action: Strictly follow steps in `@steps/UpdateProjectReferences.md`.
+
+# Phase 5: Grant Internals Visible Access to Main Project
+- Action: Strictly follow steps in `@steps/GrantInternalsVisibleTo.md`.
 """

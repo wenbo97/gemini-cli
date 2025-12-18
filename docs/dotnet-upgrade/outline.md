@@ -23,16 +23,16 @@ strictly according to the provided specific task files.
 3. **SOP Retrieval Protocol**:
    - When the workflow references a file via `@steps/...`, map this alias
      directly to the **SOP Root Path**.
-     - _Example_: If asked to load `@steps/01_init.md`, read file via read_file
-       with path `docs/dotnet-upgrade/steps/01_init.md`
+     - _Example_: If asked to load `@steps/SetupAndBranching.md`, read file via
+       read_file with path `docs/dotnet-upgrade/steps/SetupAndBranching.md`
    - When the workflow references a file via `@system-level/...`, map this alias
      directly to the **SOP Root Path**.
      - _Example_: If asked to load `@system-level/ControlPlanePkgWhitelist.md`,
        read file via read_file with path
        `docs/system-level/ControlPlanePkgWhitelist.md`
 4. **Build Command**: Do **not** assume `dotnet build`. You must refer to the
-   instructions defined in `docs/system-level/system-variables-definition.md`
-   for the correct build syntax and arguments.
+   instructions defined in `docs/system-level/SystemVariablesDefinition.md` for
+   the correct build syntax and arguments.
 
 5. **Backup Strategy**: Assume Git is used. Do not create `.bak` files unless
    explicitly instructed.

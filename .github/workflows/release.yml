@@ -10,6 +10,7 @@ permissions:
 jobs:
   build-and-upload:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,18 +23,45 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      # Only keep this step if your project needs a build command (e.g., TypeScript)
-      # If not, remove these two lines.
+      - name: Install pkg
+        run: npm install -g pkg
+
       - name: Bundle project
         run: npm run bundle
 
       - name: Pack extension
         run: npm pack --ignore-scripts
 
-      - name: Upload Release Asset
+      - name: Bundle .gemini + dotnet-upgrade docs
+        run: |
+          mkdir -p dist/package-content
+          cp -r docs/dotnet-upgrade dist/package-content/
+          cp -r .gemini dist/package-content/
+          cd dist
+          zip -r gemini-docs-package.zip package-content
+
+      - name: Build Windows exe
+        run: |
+          mkdir -p dist
+          pkg . --targets node20-win-x64 --output dist/net-upgrade-gemini.exe
+
+      - name: Upload Release .tgz
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: "*.tgz"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Gemini Docs Package
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/gemini-docs-package.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows Binary (.exe)
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/net-upgrade-gemini.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

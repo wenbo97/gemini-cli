@@ -2,4 +2,4 @@
 
 The following Package IDs are safe to share across targets:
 
-- WorkflowSDK
+- Microsoft.M365.Shield.Build.Utilities.GenerateWorkflowBindingRedirectsTask
