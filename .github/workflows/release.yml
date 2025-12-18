@@ -40,10 +40,14 @@ jobs:
           cd dist
           zip -r gemini-docs-package.zip package-content
 
-      - name: Build Windows exe
+      - name: Build cross-platform CLI binaries
         run: |
           mkdir -p dist
-          pkg . --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --out-path dist
+          pkg . --targets node18-win-x64,node18-linux-x64,node18-macos-x64 \
+            --out-path dist
+
+      - name: List dist folder (debug)
+        run: ls -lh dist
 
       - name: Upload Release .tgz
         uses: softprops/action-gh-release@v2
@@ -59,10 +63,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload CLI binaries
+      - name: Upload CLI binaries (.exe, Linux, macOS)
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/net-upgrade-gemini-*
+            dist/net-upgrade-gemini-win.exe
+            dist/net-upgrade-gemini-linux
+            dist/net-upgrade-gemini-macos
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
