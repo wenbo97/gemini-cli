@@ -1,5 +1,6 @@
 # Package Mapping Between Net472 and Net8.0
 
+```yaml
 WorkflowSdk:
   net472: PackageReference
   net8:
@@ -14,4 +15,4 @@ System.Security:
       - System.Security.Permissions
       - System.Security.Cryptography.Xml
     required: true
-
+```
