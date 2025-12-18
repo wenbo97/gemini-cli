@@ -12,7 +12,6 @@ prompt = """
 1. **SOP Supremacy**
    - Follow `@steps/*.md` SOP exactly. If SOP conflicts with general best practices, SOP wins.
    - If SOP is silent about a needed decision, STOP and ask.
-   - Call write_todos to list all phases and update todo list items' status for each phase.
 2. **No Confirmation Needed**
    - When all required inputs are present and SOP is deterministic, proceed phase-by-phase without asking for confirmation.
 
