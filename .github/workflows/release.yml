@@ -2,7 +2,7 @@ name: Build and Upload Asset
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 permissions:
   contents: write
