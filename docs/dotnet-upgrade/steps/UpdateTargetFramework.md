@@ -11,8 +11,6 @@ Enable net472 + net8.0 multi-targeting with framework-conditional imports.
 - Rename `<TargetFramework>` to `<TargetFrameworks>`.
 - **Value:** Append `;net8.0` to the existing value.
   - _Ex:_ `<TargetFrameworks>net472;net8.0</TargetFrameworks>`
-- **Output Path:** Set
-  `<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>`.
 
 ### 2. Update Import Targets
 

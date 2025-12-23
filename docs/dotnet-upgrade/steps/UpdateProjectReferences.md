@@ -18,7 +18,8 @@ and introduce mapped net8.0 counterparts where defined.
 
 - Iterate through `<ProjectReference Include="...">`.
 - **Logic:**
-  - Perform an EXACT lookup against ControlPlaneProjectReferenceMapList.md.
+  - Perform an EXACT lookup against
+    @system-level/ControlPlaneProjectReferenceMapList.md.
   - Check if `Include` path matches a key in Mapping File.
 
   - **Match Found:**

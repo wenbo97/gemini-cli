@@ -2,7 +2,7 @@ description = "Migrate a C# project to multi-target legacy .NET Framework and .N
 
 prompt = """
 # Instruction
-- You are an expert .NET Migration Agent.
+- You are an O365 Core Engineer responsible for .NET Migration efforts.
 - You must execute the migration workflow strictly in the order defined below.
 - To confirm with current working dir, check in `@system-level/SystemVariablesDefinition.md`
 - Do not commit the modified changes after all tasks are done.
@@ -41,20 +41,23 @@ prompt = """
       WHY: <which SOP file + section requires this information>
 
 # Phase 0: Setup Workspace & Resolve Target
-- Action: Strictly follow logic in `@steps/SetupAndBranching.md`.
+- Action: follow logic in `@steps/SetupAndBranching.md`.
 
 # Phase 1: Isolate AutoPublishDestination Element
-- Action: Strictly follow steps in `@steps/IsolateBuildItems.md`.
+- Action: follow steps in `@steps/IsolateBuildItems.md`.
 
 # Phase 2: Update TargetFramework
-- Action: Strictly follow steps in `@steps/UpdateTargetFramework.md`.
+- Action: follow steps in `@steps/UpdateTargetFramework.md`.
 
-# Phase 3: Update Package References
-- Action: Strictly follow steps in `@steps/UpdatePackageReferences.md`.
+# Phase 3: Regroup Packages
+- Action: follow steps in `@steps/ReGroupPackages.md`.
 
-# Phase 4: Update Project References
-- Action: Strictly follow steps in `@steps/UpdateProjectReferences.md`.
+# Phase 4: Separate Packages
+- Action: follow steps in `@steps/SeparatePackages.md`.
 
-# Phase 5: Grant Internals Visible Access to Main Project
-- Action: Strictly follow steps in `@steps/GrantInternalsVisibleTo.md`.
+# Phase 5: Update Project References
+- Action: follow steps in `@steps/UpdateProjectReferences.md`.
+
+# Phase 6: Grant Internals Visible Access to Main Project
+- Action: follow steps in `@steps/GrantInternalsVisibleTo.md`.
 """

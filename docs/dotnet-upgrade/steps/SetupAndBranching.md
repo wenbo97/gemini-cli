@@ -26,8 +26,25 @@ validating the workspace and target project.
 ### 2. Extract Project Metadata
 
 - Read the **Target Project** file content.
-- **Extract `AssemblyName`:** Use `<AssemblyName>` tag or fallback to filename.
-- **Sanitize Name:** Replace `.` with `_`. (e.g., `My.App` -> `My_App`).
+- **Extract `AssemblyName`:** Use `<AssemblyName>` element or fallback to
+  filename.
+  - _Example_:
+
+  ```xml
+    <PropertyGroup>
+      <TargetFrameworks>net472;net8.0</TargetFrameworks>
+      <ProjectGuid>{8E7D05D6-14E8-4940-BC07-3B464720724B}</ProjectGuid>
+      <OutputType>Library</OutputType>
+      <AssemblyName>Microsoft.Office.Datacenter.Workflows.LateBinding</AssemblyName>
+      <RootNamespace>Microsoft.Office.Datacenter.Workflows.LateBinding</RootNamespace>
+    </PropertyGroup>
+  ```
+  - Get `Microsoft.Office.Datacenter.Workflows.LateBinding` from
+    `<AssemblyName>` element.
+
+- **Sanitize Assembly Name:** Replace `.` with `_`. (e.g.,
+  `Microsoft.Office.Datacenter.Workflows.LateBinding` ->
+  `Microsoft_Office_Datacenter_Workflows_LateBinding`).
 
 ### 3. Determine Git User Identity
 

@@ -1,102 +1,92 @@
 # Objective
 
-For EVERY ProjectReference declared in the main project (including conditional
-and net8.0-only), ensure the referenced project explicitly grants
+Ensure EVERY project referenced by the main .csproj explicitly grants
 InternalsVisibleTo access to the main assembly.
+
+This is a WRITE-REQUIRED task.
 
 ## Hard Rules
 
-R1. ProjectReference enumeration is logical, not target-specific
+R1. Enumeration is mandatory
 
-- ALL <ProjectReference> elements in the MAIN .csproj MUST be processed
-- This includes:
-  - Conditional ProjectReference
-  - net8.0-only ProjectReference
-  - Newly added ProjectReference
+- ALL <ProjectReference> entries in the MAIN .csproj MUST be processed
+- Including:
+  - Conditional references
+  - net8.0-only references
+  - Newly added references
 
-R2. Validation is per referenced project, not global
+R2. Validation scope is per project
 
-- InternalsVisibleTo MUST be validated inside the referenced project.
-- Global search results MUST NOT be used to skip a referenced project
+- InternalsVisibleTo MUST be validated inside EACH referenced project
+- Cross-project or global search MUST NOT be used to skip a project
 
-R3. Presence of unrelated InternalsVisibleTo does NOT count
+R3. Exact match only
 
-- An InternalsVisibleTo entry only counts if:
-  - It targets Main.Assembly.Name
-  - AND it exists in the referenced project being validated
+- An InternalsVisibleTo entry counts ONLY if:
+  - Target assembly name == Main.Assembly.Name
+  - AND the entry exists in the referenced project
+
+R4. This task MUST append missing access
+
+- If a referenced project lacks required InternalsVisibleTo, the entry MUST be
+  appended (no dry-run, no deferral)
 
 ## Work Plan
 
-### Step 1. Identify Main Assembly
+### Step 1. Resolve Main Assembly
 
-- Read <AssemblyName> from the main project as Main.Assembly.Name
+- Read <AssemblyName> from the main project
+- Define as Main.Assembly.Name
 
-### Step 2. Enumerate ProjectReferences (Hard Requirement)
+### Step 2. Enumerate ProjectReferences
 
-- Parse the main .csproj.
-- Enumerate ALL <ProjectReference> elements, regardless of Condition.
-- Build a complete list of referenced project paths.
-- Enumeration MUST occur AFTER all modifications to main .csproj are complete.
-- Cached or previously observed ProjectReference lists MUST NOT be reused.
+- Parse the main .csproj AFTER all previous phases
+- Enumerate ALL <ProjectReference> elements (ignore Condition)
+- Resolve full project paths (including variables like $(INETROOT))
+- Cached results MUST NOT be reused
 
 ### Step 3. Validate InternalsVisibleTo (Per Project)
 
-- Maintain an explicit processing list.
-- EVERY ProjectReference enumerated in Step 2 MUST appear exactly once in Step 3
-  execution.
-- Skipping any enumerated ProjectReference is a task failure.
+For EACH referenced project:
 
-**For EACH referenced project:**
+3.1 Locate access-control files
 
-3.1 Resolve referenced project directory
-
-- Resolve path (including $(INETROOT))
-- Open the referenced project directory
-
-  3.2 Locate access control files
-
-- Search ONLY within this referenced project for:
+- Search ONLY within the project directory for:
   - FriendAssemblies.cs
   - AssemblyInfo.cs
-  - Any .cs file containing "InternalsVisibleTo("
+  - Any \*.cs containing `"InternalsVisibleTo("`
 
-  3.3 Validate access
+  3.2 Validate access
 
-- Check whether ANY file in this project contains: [assembly:
-  InternalsVisibleTo("Main.Assembly.Name, PublicKey=...")]
+- Check for: [assembly: InternalsVisibleTo("Main.Assembly.Name, PublicKey=...")]
 
-- If found → this project is VALID
-- If not found → MUST add entry
+- If present → OK
+- If missing → MUST append
 
-### Step 4. Resolve PublicKey (If Missing)
+### Step 4. Resolve PublicKey
 
-4.1 Local-first strategy
+Priority order:
 
-- Search within the SAME referenced project for any InternalsVisibleTo
-- Reuse its PublicKey
-
-  4.2 Fallback strategy
-
-- Search other referenced projects already validated
-- Reuse an existing PublicKey
+1. Reuse PublicKey from the SAME project (preferred)
+2. Reuse PublicKey from any previously validated referenced project
 
 Rules:
 
-- Do NOT invent or regenerate a PublicKey
-- Do NOT skip due to lack of key
+- PublicKey MUST NOT be invented
+- Task MUST NOT be skipped due to missing key
 
-### Step 5. Append Access Entry
+### Step 5. Append InternalsVisibleTo (WRITE)
 
-- Choose an existing access-control file if present; otherwise create a new
-  FriendAssemblies.cs in the referenced project.
-- Append only; MUST NOT delete, modify, reorder, or deduplicate any existing
-  lines (including assembly attributes, comments, using directives, or
-  formatting).
-- Append exactly one InternalsVisibleTo entry for the main assembly.
-- Append Example:
+- Choose an existing access-control file; otherwise create FriendAssemblies.cs
+- Append ONLY:
+  - No deletion
+  - No modification
+  - No reordering
+  - No deduplication
+- Append EXACTLY one entry:
 
 ```csharp
-  [assembly: InternalsVisibleTo("Main.Assembly.Name, PublicKey=<resolved-key>")]
+[assembly: InternalsVisibleTo("Main.Assembly.Name, PublicKey=<resolved-key>")]
 ```
 
-- End Task
+- End Task.
